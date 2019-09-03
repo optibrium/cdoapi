@@ -4,7 +4,7 @@ Background:
     Given a web application
     And an unauthenticated client
 
-Scenario: I can log in
+Scenario Outline: I can log in
     When I POST a valid <username> and <password> to /login
     Then I receive an x-api-key
     And a matching cookie
@@ -40,7 +40,7 @@ Scenario: I can log out with a cookie
     When I access the URI / with the cookie
     Then I receive a 403 status
 
-Scenario: All of the read data endpoints require authentication
+Scenario Outline: All of the read data endpoints require authentication
     When I GET the <endpoint>
     Then I receive a 403 status
 
@@ -54,7 +54,7 @@ Scenario: All of the read data endpoints require authentication
     | /dogs/1        |
     | /owner/1/pet/1 |
 
-Scenario: All of the create data endpoints require authentication
+Scenario Outline: All of the create data endpoints require authentication
     When I POST the <endpoint>
     Then I receive a 403 status
 
@@ -65,7 +65,7 @@ Scenario: All of the create data endpoints require authentication
     | /dogs          |
     | /owner/1/pet/1 |
 
-Scenario: All of the update data endpoints require authentication
+Scenario Outline: All of the update data endpoints require authentication
     When I PUT the <endpoint>
     Then I receive a 403 status
 
@@ -75,7 +75,7 @@ Scenario: All of the update data endpoints require authentication
     | /cats/1        |
     | /dogs/1        |
 
-Scenario: All of the delete data endpoints require authentication
+Scenario Outline: All of the delete data endpoints require authentication
     When I DELETE the <endpoint>
     Then I receive a 403 status
 
