@@ -5,12 +5,13 @@ Background:
     And an unauthenticated client
 
 Scenario Outline: I can log in
-    When I POST a valid <username> and <password> to /login
+    When <username> and <password> correspond to a valid user
+    And I POST {"username":"<username>","password":"<password>"} to the /login
     Then I receive an x-api-key
     And a matching cookie
-    When I access the URI / with the token
+    When I GET /authcheck with the token
     Then I receive a 200 status
-    When I access the URI / with the cookie
+    When I GET /authcheck with the cookie
     Then I receive a 200 status
 
     Examples: valid username-password pairs
@@ -21,27 +22,41 @@ Scenario Outline: I can log in
     | user        | p@55w0rd    |
 
 Scenario: I can log out with a token
-    When I POST a valid <username> and <password> to /login
+    When username and password correspond to a valid user
+    And I POST {"username":"username","password":"password"} to the /login
     Then I receive an x-api-key
-    When I access the URI / with the token
+    When I GET /authcheck with the token
     Then I receive a 200 status
-    When I access the URI /logout with the token
+    When I GET /logout with the token
     Then I receive a 403 status
-    When I access the URI / with the token
+    When I GET /authcheck with the token
     Then I receive a 403 status
 
 Scenario: I can log out with a cookie
-    When I POST a valid <username> and <password> to /login
+    When username and password correspond to a valid user
+    And I POST {"username":"username","password":"password"} to the /login
     Then I receive a cookie
-    When I access the URI / with the cookie
+    When I GET /authcheck with the cookie
     Then I receive a 200 status
-    When I access the URI /logout with the cookie
+    When I GET /logout with the cookie
     Then I receive a 403 status
-    When I access the URI / with the cookie
+    When I GET /authcheck with the cookie
     Then I receive a 403 status
 
+Scenario: The correct error code is returned when incorrect details are supplied
+    When I have no valid users
+    And I POST {"username":"username","password":"password"} to the /login
+    Then I receive a 403 status
+    And the error Incorrect Username or Password is returned
+
+Scenario: It handles when correct user and incorrect password is supplied
+    When username and password correspond to a valid user
+    And I POST {"username":"username","password":"invalid password"} to the /login
+    Then I receive a 403 status
+    And the error Incorrect Username or Password is returned
+
 Scenario Outline: All of the read data endpoints require authentication
-    When I GET the <endpoint>
+    When I GET <endpoint>
     Then I receive a 403 status
 
     Examples: Read Endpoints
@@ -52,10 +67,9 @@ Scenario Outline: All of the read data endpoints require authentication
     | /cats/1        |
     | /dogs          |
     | /dogs/1        |
-    | /owner/1/pet/1 |
 
 Scenario Outline: All of the create data endpoints require authentication
-    When I POST the <endpoint>
+    When I POST {"name":"some name"} to the <endpoint>
     Then I receive a 403 status
 
     Examples: Read Endpoints
@@ -66,7 +80,7 @@ Scenario Outline: All of the create data endpoints require authentication
     | /owner/1/pet/1 |
 
 Scenario Outline: All of the update data endpoints require authentication
-    When I PUT the <endpoint>
+    When I PUT {"name":"some name"} to the <endpoint>
     Then I receive a 403 status
 
     Examples: Read Endpoints
@@ -76,7 +90,7 @@ Scenario Outline: All of the update data endpoints require authentication
     | /dogs/1        |
 
 Scenario Outline: All of the delete data endpoints require authentication
-    When I DELETE the <endpoint>
+    When I DELETE <endpoint>
     Then I receive a 403 status
 
     Examples: Read Endpoints
