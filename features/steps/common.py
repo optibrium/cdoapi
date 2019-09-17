@@ -1,6 +1,7 @@
 from behave import given, when, then
-from com.optibrium.cdoapi.controller import application
+from com.optibrium.cdoapi import newApplication
 from com.optibrium.cdoapi.model import database, User, Owner, Animal
+import os
 from unittest.mock import patch
 
 
@@ -10,10 +11,8 @@ test_token = '2089cb241585a998618f15c2f3aaf273dfbf719be3a2293dfc704477539724f8'
 
 @given(u'a web application')
 def step_impl(context):
-    context.application = application
-    context.application.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite://'
-    context.application.app_context().push()
-    database.init_app(context.application)
+    os.environ['DATABASE'] = 'sqlite://'
+    context.application = newApplication()
     database.create_all(app=context.application)
     database.session.query(User).delete()
     database.session.query(Owner).delete()
