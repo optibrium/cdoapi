@@ -15,7 +15,6 @@ def valid_authentication_required(func):
             Security.check_token(request.cookies['token'])
 
         else:
-            print("cookies: %s" % request.cookies)
             raise Forbidden()
 
         return func(*args, **kwargs)
@@ -34,7 +33,6 @@ def valid_name_required(func):
             raise Invalid('Name not found')
 
         if re.findall('[^0-9a-zA-Z]', data['name']):
-            print(data['name'])
             raise Invalid('Names must be alphanumeric')
 
         return func(data['name'], *args, **kwargs)

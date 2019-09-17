@@ -1,6 +1,7 @@
 from behave import given, when, then
 from com.optibrium.cdoapi.controller import application
 from com.optibrium.cdoapi.model import database, User, Owner, Animal
+from unittest.mock import patch
 
 
 test_user_id = 1337
@@ -51,7 +52,6 @@ def step_impl(context, api):
 @when(u'I POST {data} to the {uri}')
 def step_impl(context, data, uri):
     context.response = context.client.post(uri, data=data)
-    print(context.response.data)
 
 
 @when(u'I PUT {data} to the /{api}/id with the id')
@@ -84,3 +84,12 @@ def step_impl(context, uri):
 @then(u'I receive a {code:d} status')
 def step_impl(context, code):
     assert code == context.response.status_code, context.response.status_code
+
+
+@when(u'a request to {endpoint} generates an exception')
+@patch('com.optibrium.cdoapi.model.database.session.query')
+def step_impl(context, patch, endpoint):
+    patch.side_effect = Exception()
+    headers = {'x-api-key': 'invalid token'}
+    context.response = context.client.get(endpoint, headers=headers)
+    patch.assert_called()

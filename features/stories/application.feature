@@ -22,3 +22,8 @@ Scenario: Failed logouts have the correct message
     When I POST {} to the /logout
     Then I receive a 403 status
     And the error No User logged out is returned
+
+Scenario: General Errors are handled cleanly
+    When a request to /authcheck generates an exception
+    Then I receive a 500 status
+    And the error please check log is returned

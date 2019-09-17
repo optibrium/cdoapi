@@ -55,5 +55,4 @@ def step_impl(context, species, name):
 
 @then(u'the object returned has a name of {name}')
 def step_impl(context, name):
-    print(context.response.json)
     assert context.response.json['name'] == name, context.response.json

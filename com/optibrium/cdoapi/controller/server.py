@@ -53,3 +53,5 @@ def handle_error(error):
 
     if isinstance(error, IntegrityError):
         return jsonify({'error': 'Name exists'}), 409
+
+    return jsonify({'error': 'please check log'}), 500

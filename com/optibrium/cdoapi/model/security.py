@@ -18,11 +18,9 @@ class Security:
 
     @staticmethod
     def check_token(token):
-        print("checkout token: %s" % token)
         try:
             database.session.query(User).filter(User.token == token).one()
         except NoResultFound:
-            print("in database: %s" % database.session.query(User).all())
             raise Forbidden()
 
     @staticmethod
