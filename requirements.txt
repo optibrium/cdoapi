@@ -1,0 +1,5 @@
+behave==1.2.6
+coverage==4.5.4
+flake8==3.7.8
+Flask==1.1.1
+Flask-SQLAlchemy==2.4.0
