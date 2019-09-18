@@ -43,6 +43,19 @@ def step_impl(context, json_string):
         assert name in names, "expected %s in %s" % (name, names)
 
 
+@given(u'every owner owns {species}s {pets}')
+def step_impl(context, species, pets):
+    for pet in database.session.query(Animal).all():
+        print("1 pet name: %s" % pet.name)
+        print("2 pet species: %s" % pet.species)
+    for owner in database.session.query(Owner).all():
+        print("3 owner name: %s" % owner.name)
+        for name in json.loads(pets):
+            print("4 json pet: %s" % name)
+            database.session.add(Animal(species=species, name=name, owner=owner.id))
+    assert False
+
+
 @then(u'a owners has been created called {name}')
 def step_impl(context, name):
     database.session.query(Owner).filter(Owner.name == name).one()
@@ -56,3 +69,13 @@ def step_impl(context, species, name):
 @then(u'the object returned has a name of {name}')
 def step_impl(context, name):
     assert context.response.json['name'] == name, context.response.json
+
+
+@then(u'every owner contains each of the {pets}')
+def step_impl(context, pets):
+    for owner in context.response.json:
+        print(owner)
+        assert False
+        received_names = [x['name'] for x in owner['pets']]
+        for name in json.loads(pets):
+            assert name in received_names

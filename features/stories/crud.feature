@@ -113,3 +113,27 @@ Scenario Outline: We can allocate and remove ownerships
     | claire | charlotte | cats |
     | bridge | charlotte | dogs |
     | bob    | alice     | dogs |
+
+Scenario Outline: Every Owner in the list contains a list of pets
+    Given owners contains ["alice", "bob", "charlotte"]
+    And every owner owns <species> <pets>
+    When I GET /owners
+    Then every owner contains each of the <pets>
+
+    Examples: Pets
+    | species | pets                           |
+    | cats    | ["belle", "dory"]              |
+    | dogs    | ["dusty", "buster", "scruggs"] |
+
+Scenario Outline: Each Owner in the list contains a list of pets
+    Given owners contains ["alice", "bob", "charlotte"]
+    And owner <name> owns <species> <pets>
+    When I GET /owners
+    Then owner <name> contains each of the <pets>
+    And owners not named <name> have no pets
+
+    Examples: Owners and Pets
+    | name        | species | pets                                          |
+    | alice       | cats    | ["belle", "dory", "jane"]                     |
+    | bob         | dogs    | ["dusty", "buster", "scruggs"]                |
+    | charlotte   | dogs    | ["darth", "norris", "griswold", "clawhauser"] |
