@@ -1,6 +1,7 @@
 from com.optibrium.cdoapi.model import database
 from com.optibrium.cdoapi.model import valid_authentication_required
 from com.optibrium.cdoapi.model import valid_name_required
+from com.optibrium.cdoapi.model import Animal
 from com.optibrium.cdoapi.model import Owner
 from com.optibrium.cdoapi.view import jsonify
 from flask import Blueprint
@@ -14,6 +15,11 @@ def read():
     owners = database.session \
                      .query(Owner) \
                      .all()
+    for owner in owners:
+        owner.pets = database.session \
+                             .query(Animal) \
+                             .filter(Animal.owner == owner.id) \
+                             .all()
     return jsonify(owners), 200
 
 
@@ -24,6 +30,10 @@ def read_single(id):
                     .query(Owner) \
                     .filter(Owner.id == id) \
                     .one()
+    owner.pets = database.session \
+                         .query(Animal) \
+                         .filter(Animal.owner == owner.id) \
+                         .all()
     return jsonify(owner), 200
 
 
