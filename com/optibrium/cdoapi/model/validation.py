@@ -1,5 +1,9 @@
+from com.optibrium.cdoapi.model import Animal
+from com.optibrium.cdoapi.model import database
 from com.optibrium.cdoapi.model import Security
-from com.optibrium.cdoapi.model.exceptions import Forbidden, Invalid
+from com.optibrium.cdoapi.model.exceptions import Forbidden
+from com.optibrium.cdoapi.model.exceptions import Invalid
+from com.optibrium.cdoapi.model.exceptions import NotFound
 from flask import request
 import re
 
@@ -36,6 +40,22 @@ def valid_name_required(func):
             raise Invalid('Names must be alphanumeric')
 
         return func(data['name'], *args, **kwargs)
+
+    decorated.__name__ = func.__name__
+    return decorated
+
+
+def existent_species_required(func):
+
+    def decorated(*args, **kwargs):
+
+        if not database.session \
+                       .query(Animal) \
+                       .filter(Animal.species == kwargs['species']) \
+                       .all():
+            raise NotFound()
+
+        return func(*args, **kwargs)
 
     decorated.__name__ = func.__name__
     return decorated

@@ -1,5 +1,6 @@
 from com.optibrium.cdoapi.model import Animal
 from com.optibrium.cdoapi.model import database
+from com.optibrium.cdoapi.model import existent_species_required
 from com.optibrium.cdoapi.model import valid_authentication_required
 from com.optibrium.cdoapi.model import valid_name_required
 from com.optibrium.cdoapi.view import jsonify
@@ -10,6 +11,7 @@ animals = Blueprint('animals', __name__)
 
 @animals.route('/<species>s', methods=['GET'])
 @valid_authentication_required
+@existent_species_required
 def read(species):
     animals = database.session \
                       .query(Animal) \
@@ -20,6 +22,7 @@ def read(species):
 
 @animals.route('/<species>s/<int:id>', methods=['GET'])
 @valid_authentication_required
+@existent_species_required
 def read_single(species, id):
     animal = database.session \
                      .query(Animal) \

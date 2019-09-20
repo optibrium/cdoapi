@@ -64,7 +64,8 @@ Scenario Outline: The create API rejects duplicate names
 Scenario Outline: We can list Owners, Cats and Dogs
     Given <type> contains ["alice", "bob", "charlotte"]
     When I GET /<type>
-    Then a list of names containing ["alice", "bob", "charlotte"] is returned
+    Then I receive a 200 status
+    And a list of names containing ["alice", "bob", "charlotte"] is returned
 
     Examples: Types
     | type   |
@@ -124,3 +125,16 @@ Scenario: Every Owner in the list contains a list of pets
     Then alice is returned with pets ["bella", "dory"]
     And bob is returned with pets ["dusty", "buster", "scruggs"]
     And charlotte is returned with pets ["sherlock", "meeko", "garfield", "keanu", "gulliver"]
+
+Scenario Outline: Non-existent pets return Not Found
+    Given <type> contains ["garfield", "keanu", "gulliver"]
+    When I GET /<other_type>
+    Then I receive a 404 status
+
+    Examples: Types
+    | type   | other_type |
+    | cats   | dogs       |
+    | dogs   | cats       |
+    | cats   | unicorns   |
+    | dogs   | unicorns   |
+    
