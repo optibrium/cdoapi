@@ -26,6 +26,7 @@ def login():
     if not user.token:
         user.token = Security.generate_token()
         database.session.add(user)
+        database.session.flush()
 
     response = make_response(jsonify({'x-api-key': user.token}))
     response.set_cookie('token', user.token)
