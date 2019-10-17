@@ -58,6 +58,7 @@ Scenario: It handles when correct user and incorrect password is supplied
 Scenario Outline: All of the read data endpoints require authentication
     When I GET <endpoint>
     Then I receive a 403 status
+    And the error Unauthorised is returned
 
     Examples: Read Endpoints
     | endpoint       |
@@ -71,6 +72,7 @@ Scenario Outline: All of the read data endpoints require authentication
 Scenario Outline: All of the create data endpoints require authentication
     When I POST {"name":"some name"} to the <endpoint>
     Then I receive a 403 status
+    And the error Unauthorised is returned
 
     Examples: Read Endpoints
     | endpoint       |
@@ -82,6 +84,7 @@ Scenario Outline: All of the create data endpoints require authentication
 Scenario Outline: All of the update data endpoints require authentication
     When I PUT {"name":"some name"} to the <endpoint>
     Then I receive a 403 status
+    And the error Unauthorised is returned
 
     Examples: Read Endpoints
     | endpoint       |
@@ -92,6 +95,7 @@ Scenario Outline: All of the update data endpoints require authentication
 Scenario Outline: All of the delete data endpoints require authentication
     When I DELETE <endpoint>
     Then I receive a 403 status
+    And the error Unauthorised is returned
 
     Examples: Read Endpoints
     | endpoint       |

@@ -19,7 +19,7 @@ def valid_authentication_required(func):
             Security.check_token(request.cookies['token'])
 
         else:
-            raise Forbidden()
+            raise Forbidden('Unauthorised')
 
         return func(*args, **kwargs)
 
