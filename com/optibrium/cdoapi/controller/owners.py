@@ -1,4 +1,5 @@
 from com.optibrium.cdoapi.model import database
+from com.optibrium.cdoapi.model import optional_position
 from com.optibrium.cdoapi.model import valid_authentication_required
 from com.optibrium.cdoapi.model import valid_name_required
 from com.optibrium.cdoapi.model import Animal
@@ -49,14 +50,18 @@ def create(name):
 
 @owners.route('/owners/<int:id>', methods=['PUT'])
 @valid_authentication_required
+@optional_position
 @valid_name_required
-def create_single(name, id):
+def create_single(name, x, y, id):
     owner = database.session \
                     .query(Owner) \
                     .filter(Owner.id == id) \
                     .one()
     owner.name = name
+    owner.position_x = x
+    owner.position_y = y
     database.session.add(owner)
+    database.session.flush()
     return '', 201
 
 

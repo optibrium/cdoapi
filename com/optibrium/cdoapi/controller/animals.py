@@ -3,6 +3,7 @@ from com.optibrium.cdoapi.model import database
 from com.optibrium.cdoapi.model import existent_species_required
 from com.optibrium.cdoapi.model import valid_authentication_required
 from com.optibrium.cdoapi.model import valid_name_required
+from com.optibrium.cdoapi.model import optional_position
 from com.optibrium.cdoapi.view import jsonify
 from flask import Blueprint
 
@@ -44,15 +45,19 @@ def create(name, species):
 
 @animals.route('/<species>s/<int:id>', methods=['PUT'])
 @valid_authentication_required
+@optional_position
 @valid_name_required
-def create_single(name, species, id):
+def create_single(name, x, y, species, id):
     animal = database.session \
                      .query(Animal) \
                      .filter(Animal.species == species) \
                      .filter(Animal.id == id) \
                      .one()
     animal.name = name
+    animal.position_x = x
+    animal.position_y = y
     database.session.add(animal)
+    database.session.flush()
     return '', 201
 
 

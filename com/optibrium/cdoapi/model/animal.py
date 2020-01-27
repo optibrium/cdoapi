@@ -13,3 +13,7 @@ class Animal(database.Model):
     species = Column('species', String)
 
     owner = Column('owner', Integer, ForeignKey('owners.id'))
+
+    position_x = Column('position_x', Integer)
+
+    position_y = Column('position_y', Integer)

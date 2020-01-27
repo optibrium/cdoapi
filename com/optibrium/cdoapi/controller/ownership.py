@@ -15,6 +15,7 @@ def create(owner, pet):
                      .one()
     animal.owner = owner
     database.session.add(animal)
+    database.session.flush()
     return '', 201
 
 
@@ -28,4 +29,5 @@ def delete(owner, pet):
                      .one()
     animal.owner = None
     database.session.add(animal)
+    database.session.flush()
     return '', 202

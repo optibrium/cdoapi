@@ -9,3 +9,8 @@ class Owner(database.Model):
     id = Column('id', Integer, primary_key=True)
 
     name = Column('name', String, unique=True)
+
+    position_x = Column('position_x', Integer)
+
+    position_y = Column('position_y', Integer)
+

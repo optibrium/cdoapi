@@ -59,3 +59,20 @@ def existent_species_required(func):
 
     decorated.__name__ = func.__name__
     return decorated
+
+def optional_position(func):
+
+    def decorated(*args, **kwargs):
+
+        data = request.get_json(force=True)
+
+        if 'position_x' not in data:
+            position_x = 0
+
+        if 'position_y' not in data:
+            position_y = 0
+
+        return func(int(data['position_x']), int(data['position_y']), *args, **kwargs)
+
+    decorated.__name__ = func.__name__
+    return decorated
