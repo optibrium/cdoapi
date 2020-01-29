@@ -101,10 +101,10 @@ Scenario Outline: We can update Owners, Cats and Dogs' positions
     And I GET /<type>/id with the id
     Then the object returned has a name of <name>
     And the object returned has a position of 0 x 0
-    When I PUT {"name": "<new_name>", "x": 7, "y": 11} to the /<type>/id/position with the id
+    When I PUT {"name": "<new_name>", "position_x": 7, "position_y": 11} to the /<type>/id with the id
     And I GET /<type>/id with the id
     Then the object returned has a name of <new_name>
-    And the object returned has a position of 0 x 0
+    And the object returned has a position of 7 x 11
     
     Examples: names and types
     | name | type    | new_name  |

@@ -64,11 +64,12 @@ def step_impl(context, species, name):
 def step_impl(context, name):
     assert context.response.json['name'] == name, context.response.json
 
+
 @then(u'the object returned has a position of {x} x {y}')
 def step_impl(context, x, y):
-    print(context.response.json)
-    assert context.response.json['x'] == x, context.response.json
-    assert context.response.json['y'] == y, context.response.json
+    assert context.response.json['position_x'] == int(x), context.response.json
+    assert context.response.json['position_y'] == int(y), context.response.json
+
 
 @then(u'{owner_name} is returned with pets {expected_pets}')
 def step_impl(context, owner_name, expected_pets):

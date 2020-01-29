@@ -14,6 +14,6 @@ class Animal(database.Model):
 
     owner = Column('owner', Integer, ForeignKey('owners.id'))
 
-    position_x = Column('position_x', Integer)
+    position_x = Column('position_x', Integer, default=0)
 
-    position_y = Column('position_y', Integer)
+    position_y = Column('position_y', Integer, default=0)
