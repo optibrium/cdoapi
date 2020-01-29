@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='cdoapi',
-    version='1.0.0',
+    version='1.3.0',
 
     author='Graham, DevOps, Optibrium',
     author_email='graham@optibrium.com',
@@ -25,6 +25,7 @@ setup(
     description='An API for use in the Optibrium tech test',
     install_requires=[
         'Flask>=1.1.1',
+        'Flask-Cors==3.0.8',
         'Flask-SQLAlchemy>=2.4.0',
         'psycopg2-binary>=2.8.3'
     ],

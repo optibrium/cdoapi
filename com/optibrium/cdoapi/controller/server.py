@@ -1,4 +1,5 @@
 from flask import Flask, jsonify
+from flask_cors import CORS
 from com.optibrium.cdoapi.controller.animals import animals
 from com.optibrium.cdoapi.controller.authentication import authentication
 from com.optibrium.cdoapi.controller.owners import owners
@@ -17,6 +18,8 @@ application.register_blueprint(authentication)
 application.register_blueprint(owners)
 application.register_blueprint(animals)
 application.register_blueprint(ownership)
+
+CORS(application)
 
 
 @application.route('/')
