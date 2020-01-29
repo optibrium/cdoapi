@@ -13,4 +13,3 @@ class Owner(database.Model):
     position_x = Column('position_x', Integer)
 
     position_y = Column('position_y', Integer)
-
