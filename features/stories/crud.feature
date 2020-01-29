@@ -85,6 +85,26 @@ Scenario Outline: We can create, read, update and delete Owners, Cats and Dogs
     Then I receive a 202 status
     When I GET /<type>/id with the id
     Then I receive a 404 status
+
+    Examples: names and types
+    | name | type    | new_name  |
+    | test | owners  | something |
+    | test | cats    | something |
+    | test | dogs    | something |
+    | bob  | owners  | alice     |
+    | bob  | cats    | alice     |
+    | bob  | dogs    | alice     |
+
+Scenario Outline: We can update Owners, Cats and Dogs' positions
+    When I POST {"name":"<name>"} to the /<type>
+    And I receive an id
+    And I GET /<type>/id with the id
+    Then the object returned has a name of <name>
+    And the object returned has a position of 0 x 0
+    When I PUT {"name": "<new_name>", "x": 7, "y": 11} to the /<type>/id/position with the id
+    And I GET /<type>/id with the id
+    Then the object returned has a name of <new_name>
+    And the object returned has a position of 0 x 0
     
     Examples: names and types
     | name | type    | new_name  |
